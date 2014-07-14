@@ -10,6 +10,7 @@ package SlideShow;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -24,6 +25,7 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -42,6 +44,7 @@ public class GUIImageViewer
     static JLabel currentCaption = new JLabel("sample caption");
     static JMenuBar menuBar = new JMenuBar();
     static JMenu fileMenu = new JMenu("File");
+    static JMenu editMenu = new JMenu("Edit");
     static JButton browseButton = new JButton("Browse for Image");
     static JButton saveButton = new JButton("Save Slide");
     static JButton addButton = new JButton("Create Slide");
@@ -56,6 +59,7 @@ public class GUIImageViewer
     static JMenuItem saveMenu = new JMenuItem("Save");
     static JMenuItem openMenu = new JMenuItem("Open");
     static JMenuItem exitMenu = new JMenuItem("Exit");
+    static JMenuItem undoMenu = new JMenuItem("Undo");
     static Object[] slides;
     static JList<SlideImage> slideList;
     static DefaultListModel model;
@@ -66,18 +70,22 @@ public class GUIImageViewer
     static SlideShow sShow = new SlideShow();
     static BorderLayout myLayout = new BorderLayout();
     static ImageViewer myViewer;
+    static DraggableImage draggableCaption;
+    static JLayeredPane layers = new JLayeredPane();
 
     static GUIListener myListener = new GUIListener();
 
 	@SuppressWarnings("unchecked")
     public static void main(String[] args)
 	{
-		myViewer = new ImageViewer(imageBox);
+        myViewer = new ImageViewer(imageBox);
         menuBar.add(fileMenu);
         fileMenu.add(newMenu);
         fileMenu.add(saveMenu);
         fileMenu.add(openMenu);
         fileMenu.add(exitMenu);
+        menuBar.add(editMenu);
+        editMenu.add(undoMenu);
         newMenu.addActionListener(myListener);
         saveMenu.addActionListener(myListener);
         openMenu.addActionListener(myListener);
@@ -126,13 +134,13 @@ public class GUIImageViewer
         myFrame.getContentPane().add(myBox, BorderLayout.WEST);
         currentCaption.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         currentCaption.setFont(currentCaption.getFont().deriveFont(20.0f));
-        currentCaption.setOpaque(true);
         imageBox.add(myViewer);
-        imageBox.add(Box.createRigidArea(new Dimension(0,10)));
-        imageBox.add(currentCaption);
+        draggableCaption = new DraggableImage(currentCaption, new Point(myFrame.getWidth()/3,myFrame.getHeight()-menuBar.getPreferredSize().height*2
+        - currentCaption.getPreferredSize().height*2-20));
+        //20 is used since that is the font size.
+        
+        myViewer.add(currentCaption);
         imageBox.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 0, Color.gray));
-        myViewer.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Color.gray));
-        imageBox.add(Box.createRigidArea(new Dimension(0, 10)));
         myFrame.getContentPane().add(imageBox, BorderLayout.CENTER);
         Dimension browseSize = new Dimension(80, 20);
         fileArea.setMinimumSize(browseSize);
