@@ -1,13 +1,14 @@
 /*
-	Serializer.java
+	SlideImage.java
 
-    Assignment #4 - CS151 - SJSU
+    Assignment #3 - CS151 - SJSU
 	By Luca Severini, Omari Straker, Syed Sarmad, Matt Szikley
-	July-10-2014
+	June-26-2014
 */
 
 package SlideShow;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,47 +22,85 @@ import javax.imageio.ImageIO;
  * @param caption, the caption to the image.
  * @param filePath, the path to the image. 
  */
-public class SlideImage implements Serializable
+public class SlideImage implements Serializable 
 {
 	private static final long serialVersionUID = 1L;
     private transient BufferedImage image;
     private String caption; 
 	private String filePath;
-    
+    private Point captionLocation;
+    private int x;
+    private int y;
    /* 
     * Default Constructor That creates 
     * the SlideImage Object (Slide)
     * @param image, image SlideImage(Slide) holds,
     * @param caption, caption to the image
     * @param filepath, the file path to the image
+    * @param captionLocation, sets the caption to the default location
     */
     public SlideImage() 
     {
         this.image = null;
         this.caption = null;
         this.filePath = null;
+        this.captionLocation = new Point(x, y);
     }
-/*
-	SlideImage.java
 
-    Assignment #3 - CS151 - SJSU
-	By Luca Severini, Omari Straker, Syed Sarmad, Matt Szikley
-	June-26-2014
-*/
     /*
      * Constructor which sets the Image, the file path for that image and
      * caption upon creation. 
      * @param image, image SlideImage(Slide) holds,
      * @param caption, caption to the image
      * @param filepath, the file path to the image
+     * @param captionLocation, sets the caption to the default location
      */
     public SlideImage(String caption, String filePath, BufferedImage image)
     {
         this.caption = caption;
         this.filePath = filePath;
         this.image = image;
+        this.captionLocation = new Point(x, y);
     }
+    
+    /*
+     * Constructor which sets the Image, the file path for that image,
+     * caption, and caption location upon creation. 
+     * @param image, image SlideImage(Slide) holds,
+     * @param caption, caption to the image
+     * @param filepath, the file path to the image
+     * @param captionLocation, sets the caption to the Specified location
+     */
+    public SlideImage(BufferedImage image, String caption, String filePath, Point captionLocation) 
+    {
+        this.image = image;
+        this.caption = caption;
+        this.filePath = filePath;
+        this.captionLocation = captionLocation;
+        
        
+    }
+    
+    /**
+     * 
+     * @return: Point
+     * returns the captionLocation
+     */
+          
+    public Point getCaptionLocation()
+    {
+        return captionLocation;
+    }
+    
+    /**
+     * Sets the captions location
+     * @param location
+     * 
+     */
+    public void setCaptionLocation(Point location)
+    {
+        captionLocation = new Point(location);
+    }
     /*
      * Returns the Slide's image
      * @param none.
