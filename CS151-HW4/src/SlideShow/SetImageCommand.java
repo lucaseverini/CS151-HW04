@@ -9,6 +9,7 @@ package SlideShow;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import javax.swing.AbstractAction;
 
 /**
@@ -19,11 +20,15 @@ public class SetImageCommand extends AbstractAction{
 
     String CURRENT_IMAGE = "Current Location";
     String OLD_IMAGE = "Old Location";
+    String SLIDE_IMAGE = "Slide Image";
     
-    public SetImageCommand(String name, Image pic)
+    public SetImageCommand(String name, SlideImage slideChanged, BufferedImage oldPic, BufferedImage newPic)
     {
         super(name);
-        putValue(CURRENT_IMAGE,pic);
+        putValue(SLIDE_IMAGE, slideChanged);
+        putValue(OLD_IMAGE, oldPic);
+        putValue(CURRENT_IMAGE,newPic);
+        slideChanged.setImage(newPic);
         //or do we put the default location here?
     }
     @Override
@@ -37,7 +42,7 @@ public class SetImageCommand extends AbstractAction{
     public void undo()
     {
         //Set IMAGE of caption to the value stored in old image
-        //update slide image to equal old image?
+        ((SlideImage)getValue(SLIDE_IMAGE)).setImage((BufferedImage)getValue(OLD_IMAGE));        
     }
     
 }
