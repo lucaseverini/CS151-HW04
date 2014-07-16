@@ -13,7 +13,8 @@ import java.awt.event.ActionEvent;
  * @author omari
  */
 public class CommandAction extends AbstractAction {
-
+    
+    protected String SLIDE_IMAGE = "Slide Image";
     public CommandAction(String name) {
         super(name);
     }

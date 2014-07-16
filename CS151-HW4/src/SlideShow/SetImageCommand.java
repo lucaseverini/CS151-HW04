@@ -16,12 +16,10 @@ import javax.swing.AbstractAction;
  *
  * @author omari
  */
-public class SetImageCommand extends AbstractAction{
+public class SetImageCommand extends CommandAction{
 
     String CURRENT_IMAGE = "Current Location";
     String OLD_IMAGE = "Old Location";
-    String SLIDE_IMAGE = "Slide Image";
-    
     public SetImageCommand(String name, SlideImage slideChanged, BufferedImage oldPic, BufferedImage newPic)
     {
         super(name);

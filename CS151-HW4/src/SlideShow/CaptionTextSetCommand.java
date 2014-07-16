@@ -18,7 +18,6 @@ public class CaptionTextSetCommand extends CommandAction{
     
     String CURRENT_CAPTION = "Current Caption";
     String OLD_CAPTION = "Old Caption";
-    String SLIDE_IMAGE = "Slide Image";
     public CaptionTextSetCommand(String name, SlideImage slideChanged, String oldCaption, String newCaption)
     {
         super(name);

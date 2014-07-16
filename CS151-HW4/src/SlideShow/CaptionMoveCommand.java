@@ -19,10 +19,10 @@ public class CaptionMoveCommand extends AbstractAction{
     String CURRENT_LOCATION = "Current Location";
     String OLD_LOCATION = "Old Location";
     
-    public CaptionMoveCommand(String name, Point location)
+    public CaptionMoveCommand(String name, SlideImage slideChanged, Point oldLocation, Point newLocation)
     {
         super(name);
-        putValue(CURRENT_LOCATION,location);
+        putValue(CURRENT_LOCATION,oldLocation);
         //or do we put the default location here?
     }
     @Override
