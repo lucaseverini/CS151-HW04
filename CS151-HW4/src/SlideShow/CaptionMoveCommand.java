@@ -14,16 +14,18 @@ import javax.swing.AbstractAction;
  *
  * @author omari
  */
-public class CaptionMoveCommand extends AbstractAction{
+public class CaptionMoveCommand extends CommandAction{
 
-    String CURRENT_LOCATION = "Current Location";
     String OLD_LOCATION = "Old Location";
+    String NEW_LOCATION = "Old Location";
     
     public CaptionMoveCommand(String name, SlideImage slideChanged, Point oldLocation, Point newLocation)
     {
         super(name);
-        putValue(CURRENT_LOCATION,oldLocation);
-        //or do we put the default location here?
+        putValue(SLIDE_IMAGE, slideChanged); 
+        putValue(OLD_LOCATION,oldLocation);
+        putValue(NEW_LOCATION,newLocation);
+        slideChanged.setCaptionLocation(newLocation);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -37,7 +39,7 @@ public class CaptionMoveCommand extends AbstractAction{
     public void undo()
     {
         //Set location of caption to the value stored in old location
-        //update slide image to equal old location?
+        ((SlideImage)getValue(SLIDE_IMAGE)).setCaptionLocation((Point)getValue(OLD_LOCATION));        
     }
     
 }
