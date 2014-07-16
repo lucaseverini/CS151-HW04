@@ -15,30 +15,28 @@ import javax.swing.AbstractAction;
  */
 public class CommandList {
 
-    private ArrayList<AbstractAction> actionList;
+    private ArrayList<CommandAction> actionList;
     private final int MAX_UNDO = 10;
     public CommandList()
     {
-        actionList = new ArrayList<>();
-        
+        actionList = new ArrayList<>();      
     }
     //perform the action
-    public void performAction(AbstractAction a)
+    public void performAction(CommandAction a)
     {
         actionList.add(a);
         if (actionList.size() > MAX_UNDO)
         {
             actionList.remove(0);
         }
-        a.actionPerformed(null);
     }
     
     public void undo()
     {
         if (actionList.size() > 0)
         {
-            AbstractAction a = actionList.remove(actionList.size() - 1);
-            //TODO: call a's undo method.
+            CommandAction a = actionList.remove(actionList.size() - 1);
+            a.undo();
         }
     }
     
