@@ -14,15 +14,18 @@ import javax.swing.AbstractAction;
  *
  * @author omari
  */
-public class CaptionTextSetCommand extends AbstractAction{
-
+public class CaptionTextSetCommand extends CommandAction{
+    
     String CURRENT_CAPTION = "Current Caption";
     String OLD_CAPTION = "Old Caption";
-    
-    public CaptionTextSetCommand(String name, String caption)
+    String SLIDE_IMAGE = "Slide Image";
+    public CaptionTextSetCommand(String name, SlideImage slideChanged, String oldCaption, String newCaption)
     {
         super(name);
-        putValue(CURRENT_CAPTION,caption);
+        putValue(OLD_CAPTION,oldCaption);
+        putValue(CURRENT_CAPTION, newCaption);
+        putValue(SLIDE_IMAGE, slideChanged);
+        slideChanged.setCaption(newCaption);
         //or do we put the default caption here?
     }
     @Override
@@ -30,14 +33,13 @@ public class CaptionTextSetCommand extends AbstractAction{
         //use put value to store old caption in OLD_CAPTION mneumonic making changes
         //not exactly sure what goes here, is there where the caption would get set in slideimage?
         //or do we just store the new caption under the CURRENT_CAPTION mneumonic here?
-
+    
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+    @Override
     public void undo()
     {
+        ((SlideImage)getValue(SLIDE_IMAGE)).setCaption(getValue(OLD_CAPTION).toString());
         //set caption back to old caption
-        //do we update the Slideimage as well?
     }
-    
 }
