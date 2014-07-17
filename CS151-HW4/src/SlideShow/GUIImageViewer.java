@@ -210,6 +210,7 @@ public class GUIImageViewer
 	{
         sShow = new SlideShow();
         addNewSlide();
+        commandList.clear();
     }
 
     public static void saveSlideShow() 
@@ -228,6 +229,7 @@ public class GUIImageViewer
 			String message = String.format("The file %s can't be saved.", currFile.getPath());
 			JOptionPane.showMessageDialog(null, message, "Slide Wizard", JOptionPane.ERROR_MESSAGE);
 		}
+        commandList.clear();
     }
 
     public static void openSlideShow() 
@@ -250,6 +252,7 @@ public class GUIImageViewer
 			refreshSlidesList();
 			refreshSlide();
 		}
+                commandList.clear();
     }
 
     public static void addNewSlide() {
