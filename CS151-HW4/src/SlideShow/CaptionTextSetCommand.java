@@ -38,7 +38,10 @@ public class CaptionTextSetCommand extends CommandAction{
     @Override
     public void undo()
     {
-        ((SlideImage)getValue(SLIDE_IMAGE)).setCaption(getValue(OLD_CAPTION).toString());
+        SlideImage pow = (SlideImage)getValue(SLIDE_IMAGE);
+        String bam = (String)getValue(OLD_CAPTION);
+        pow.setCaption(bam);
+        //((SlideImage)getValue(SLIDE_IMAGE)).setCaption(getValue(OLD_CAPTION).toString());
         //set caption back to old caption
     }
 }
