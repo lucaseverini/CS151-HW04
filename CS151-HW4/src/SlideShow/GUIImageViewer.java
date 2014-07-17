@@ -66,14 +66,14 @@ public class GUIImageViewer
     static JFileChooser chooser = new JFileChooser();
     static FileNameExtensionFilter picFilter = new FileNameExtensionFilter("JPG, PNG, or BMP", "jpg", "png", "bmp");
     static FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("TXT", "txt");
-	static FileNameExtensionFilter binFilter = new FileNameExtensionFilter("BIN", "bin");
+    static FileNameExtensionFilter binFilter = new FileNameExtensionFilter("BIN", "bin");
     static SlideShow sShow = new SlideShow();
     static BorderLayout myLayout = new BorderLayout();
     static ImageViewer myViewer;
     static DraggableImage draggableCaption;
     static JLayeredPane layers = new JLayeredPane();
-
     static GUIListener myListener = new GUIListener();
+    static CommandList commandList = new CommandList();
 
 	@SuppressWarnings("unchecked")
     public static void main(String[] args)
@@ -90,6 +90,7 @@ public class GUIImageViewer
         saveMenu.addActionListener(myListener);
         openMenu.addActionListener(myListener);
         exitMenu.addActionListener(myListener);
+        undoMenu.addActionListener(myListener);
         myFrame.setLayout(myLayout);
         myFrame.setMinimumSize(new Dimension(900, 600));
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -189,6 +190,10 @@ public class GUIImageViewer
             if (event.getSource() == exitMenu) {
                 myFrame.dispose();
             }
+            
+            if (event.getSource() == undoMenu) {
+                undoLastAction();
+            }
         }
     }
 
@@ -247,18 +252,22 @@ public class GUIImageViewer
 		}
     }
 
-    public static void addNewSlide() 
-	{
+    public static void addNewSlide() {
         sShow.addSlide(new SlideImage());
         refreshSlidesList();
         refreshSlide();
         slideList.setSelectedIndex(sShow.getSize() - 1);
     }
 
-    public static void saveSlide()
-    {
-        slideList.getSelectedValue().setCaption((captionArea.getText()));
-        refreshSlidesList();
+    public static void saveSlide() {
+        String newCaption = captionArea.getText();
+        SlideImage slideChanged = slideList.getSelectedValue();
+        String oldCaption = slideChanged.getCaption();
+        if (!newCaption.equals(oldCaption)) {
+            commandList.performAction(new CaptionTextSetCommand("Text Set", slideChanged, oldCaption, newCaption));
+            //slideChanged.setCaption((newCaption)); old code from assignment 3
+            refreshSlidesList();
+        }
     }
 
     public static void removeSlide() 
@@ -383,6 +392,13 @@ public class GUIImageViewer
 			String message = String.format("The image %s can't be imported in the slide.", currFile.getPath());
 			JOptionPane.showMessageDialog(null, message, "Slide Wizard", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    public static void undoLastAction()
+    {
+       commandList.undo();
+       refreshSlide();
+        //refreshSlidesList();
     }
 
     //SlideImages part of test method. To be deleted later.
