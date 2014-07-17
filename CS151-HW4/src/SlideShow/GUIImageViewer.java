@@ -365,35 +365,27 @@ public class GUIImageViewer
     }
 
     // call browse to get the file, if a file is found and the row is highlighted,
-    public static void browseForImage()
-	{
+    public static void browseForImage() {
         //assign that image to Slide Image instance  
         File currFile = Browse(true, picFilter);
-        try 
-		{
-            if (currFile != null) 
-			{
-                if (slideList.getSelectedIndex() != -1) 
-				{
-					BufferedImage image = ImageIO.read(currFile);
-					if(image != null)
-					{
-						slideList.getSelectedValue().setImage(image);
-						refreshSlide();
-					}
-					else
-					{
-						throw new Exception("Invalid image");
-					}
+        try {
+            if (currFile != null) {
+                if (slideList.getSelectedIndex() != -1) {
+                    BufferedImage image = ImageIO.read(currFile);
+                    SlideImage slideChanged = slideList.getSelectedValue();
+                    if (image != null) {
+                        //slideList.getSelectedValue().setImage(image); pre-CommandAction code
+                        commandList.performAction(new SetImageCommand("Image Set", slideChanged, slideChanged.getImage(), image));
+                        refreshSlide();
+                    } else {
+                        throw new Exception("Invalid image");
+                    }
                 }
             }
-        } 
-		catch (Exception ex) 
-		{
+        } catch (Exception ex) {
             // System.out.println("Image file could not be added: " + ex.getMessage());
-			
-			String message = String.format("The image %s can't be imported in the slide.", currFile.getPath());
-			JOptionPane.showMessageDialog(null, message, "Slide Wizard", JOptionPane.ERROR_MESSAGE);
+            String message = String.format("The image %s can't be imported in the slide.", currFile.getPath());
+            JOptionPane.showMessageDialog(null, message, "Slide Wizard", JOptionPane.ERROR_MESSAGE);
         }
     }
     
