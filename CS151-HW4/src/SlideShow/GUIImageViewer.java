@@ -16,6 +16,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -37,8 +39,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class GUIImageViewer 
+public class GUIImageViewer implements Observer
 {
+    static Point defaultLocation;
     static Box myBox = Box.createVerticalBox();
     static Box imageBox = Box.createVerticalBox();
     static JLabel currentCaption = new JLabel("sample caption");
@@ -66,15 +69,17 @@ public class GUIImageViewer
     static JFileChooser chooser = new JFileChooser();
     static FileNameExtensionFilter picFilter = new FileNameExtensionFilter("JPG, PNG, or BMP", "jpg", "png", "bmp");
     static FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("TXT", "txt");
-    static FileNameExtensionFilter binFilter = new FileNameExtensionFilter("BIN", "bin");
+	static FileNameExtensionFilter binFilter = new FileNameExtensionFilter("BIN", "bin");
     static SlideShow sShow = new SlideShow();
     static BorderLayout myLayout = new BorderLayout();
     static ImageViewer myViewer;
     static DraggableImage draggableCaption;
     static JLayeredPane layers = new JLayeredPane();
+
     static GUIListener myListener = new GUIListener();
     static CommandList commandList = new CommandList();
-
+    static GUIImageViewer imgViewer = new GUIImageViewer();
+    static String border;
 	@SuppressWarnings("unchecked")
     public static void main(String[] args)
 	{
@@ -118,7 +123,7 @@ public class GUIImageViewer
         myBox.add(Box.createRigidArea(new Dimension(0, 10)));
         Dimension listSize = new Dimension(180, 200);
 
-		slideList = new JList(slides);
+        slideList = new JList(slides);
         slideList.setMaximumSize(listSize);
         slideList.setMinimumSize(listSize);
         slideList.addListSelectionListener(new JListListener());
@@ -136,8 +141,12 @@ public class GUIImageViewer
         currentCaption.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         currentCaption.setFont(currentCaption.getFont().deriveFont(20.0f));
         imageBox.add(myViewer);
-        draggableCaption = new DraggableImage(currentCaption, new Point(myFrame.getWidth()/3,myFrame.getHeight()-menuBar.getPreferredSize().height*2
-        - currentCaption.getPreferredSize().height*2-20));
+        defaultLocation = new Point(myFrame.getWidth()/3, 
+                myFrame.getHeight()-menuBar.getPreferredSize().height*2 - 
+                        currentCaption.getPreferredSize().height*2-20);
+        draggableCaption = new DraggableImage(currentCaption, defaultLocation);
+        draggableCaption.addObserver(imgViewer);
+//        draggableCaption.addObserver(slideList.getSelectedValue().getObserver());
         //20 is used since that is the font size.
         
         myViewer.add(currentCaption);
@@ -151,6 +160,46 @@ public class GUIImageViewer
         captionArea.setMaximumSize(captionSize);
         createNewSlideShow();
         myFrame.setVisible(true);
+    }
+
+    
+    public void update(Observable o, Object arg) {
+         /*DraggableImage newImage = (DraggableImage)arg;
+         System.out.println(newImage.getLocation());
+         Above code returns a typecast exception. Get around this via using
+         Point, which is the only object we care about.*/
+         Point validLocation = slideList.getLocation();
+         Point newPoint = (Point)arg;
+         if(!OutOfBounds(newPoint)){
+         slideList.getSelectedValue().setCaptionLocation(newPoint);
+         }
+         else{
+             draggableCaption.setInsideWindow(false);
+             draggableCaption.setBorder(border);
+         }
+    }
+
+    
+    public boolean OutOfBounds(Point p){
+        //Method to determine if a point is outside of the frame.
+        if(p.getX()<0){
+            border = "left";
+        }
+            
+        else if(p.getY()<0){
+            border = "up";
+        }
+        
+        else if(p.getX() >myFrame.getWidth()*2/3){
+            border = "right";
+        }
+        
+        else if (p.getY() > myFrame.getHeight()-menuBar.getPreferredSize().height*2
+                - currentCaption.getPreferredSize().height*2-20){
+            border = "down";
+        }
+        else return false;
+        return true;
     }
 
     public static class GUIListener implements ActionListener 
@@ -190,18 +239,18 @@ public class GUIImageViewer
             if (event.getSource() == exitMenu) {
                 myFrame.dispose();
             }
-            
-            if (event.getSource() == undoMenu) {
-                undoLastAction();
-            }
+             if (event.getSource() == undoMenu) {
+                 undoLastAction();
+             }
         }
     }
 
     public static class JListListener implements ListSelectionListener
 	{
         @Override
-        public void valueChanged(ListSelectionEvent e)
-		{
+        public void valueChanged(ListSelectionEvent e){
+//            if(slideList.getSelectedValue().getCaptionLocation()!=null)
+//            currentCaption.setLocation(slideList.getSelectedValue().getCaptionLocation());
             refreshSlide();
         }
     }
@@ -228,8 +277,8 @@ public class GUIImageViewer
 		{
 			String message = String.format("The file %s can't be saved.", currFile.getPath());
 			JOptionPane.showMessageDialog(null, message, "Slide Wizard", JOptionPane.ERROR_MESSAGE);
+                        commandList.clear();
 		}
-        commandList.clear();
     }
 
     public static void openSlideShow() 
@@ -251,8 +300,9 @@ public class GUIImageViewer
 			sShow = slideShow;
 			refreshSlidesList();
 			refreshSlide();
+                        
 		}
-                commandList.clear();
+                        commandList.clear();
     }
 
     public static void addNewSlide() {
@@ -262,7 +312,7 @@ public class GUIImageViewer
         slideList.setSelectedIndex(sShow.getSize() - 1);
     }
 
-    public static void saveSlide() {
+    public static void saveSlide(){
         String newCaption = captionArea.getText();
         SlideImage slideChanged = slideList.getSelectedValue();
         String oldCaption = slideChanged.getCaption();
@@ -292,8 +342,7 @@ public class GUIImageViewer
         //Sarmad
     }
 
-    public static void refreshSlide() 
-	{
+    public static void refreshSlide() {
         //in case no row is actually selected, don't want to cause a runtime error. 
         //Just auto select the first row on the jList because list will never be empty
         if (slideList.getSelectedIndex() == -1) {
@@ -365,7 +414,7 @@ public class GUIImageViewer
     }
 
     // call browse to get the file, if a file is found and the row is highlighted,
-    public static void browseForImage() {
+    public static void browseForImage(){
         //assign that image to Slide Image instance  
         File currFile = Browse(true, picFilter);
         try {
@@ -382,8 +431,7 @@ public class GUIImageViewer
                     }
                 }
             }
-        } catch (Exception ex) {
-            // System.out.println("Image file could not be added: " + ex.getMessage());
+        }catch (Exception ex){
             String message = String.format("The image %s can't be imported in the slide.", currFile.getPath());
             JOptionPane.showMessageDialog(null, message, "Slide Wizard", JOptionPane.ERROR_MESSAGE);
         }
