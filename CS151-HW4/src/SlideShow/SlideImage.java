@@ -99,7 +99,7 @@ public class SlideImage implements Serializable
     {
         this.captionLocation = location;
 		
-		System.out.println(location);
+		//System.out.println(location);
     }
     /*
      * Returns the Slide's image

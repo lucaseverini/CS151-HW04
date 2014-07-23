@@ -17,17 +17,14 @@ import javax.swing.AbstractAction;
 public class CaptionMoveCommand extends CommandAction{
 
     String OLD_LOCATION = "Old Location";
-    String NEW_LOCATION = "Old Location";
+    String NEW_LOCATION = "New Location";
     
     public CaptionMoveCommand(String name, SlideImage slideChanged, Point oldLocation, Point newLocation)
     {
         super(name);
-		
-        putValue(SLIDE_IMAGE, slideChanged); 
-		
+        putValue(SLIDE_IMAGE, slideChanged); 		
         putValue(OLD_LOCATION, oldLocation);
         putValue(NEW_LOCATION, newLocation);
-		
         slideChanged.setCaptionLocation(newLocation);
     }
 	
@@ -41,10 +38,13 @@ public class CaptionMoveCommand extends CommandAction{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    @Override
     public void undo()
     {
         // Set location of caption to the value stored in old location
-        ((SlideImage)getValue(SLIDE_IMAGE)).setCaptionLocation((Point)getValue(OLD_LOCATION));        
+        SlideImage pow = (SlideImage)getValue(SLIDE_IMAGE);
+        Point bam = (Point)getValue(OLD_LOCATION);
+        pow.setCaptionLocation(bam);
     }
     
 }

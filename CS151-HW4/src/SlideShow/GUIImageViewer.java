@@ -167,21 +167,20 @@ public class GUIImageViewer implements Observer
          System.out.println(newImage.getLocation());
          Above code returns a typecast exception. Get around this via using
          Point, which is the only object we care about.*/
-         
          Point oldPoint;
          oldPoint = draggableCaption.getOldPoint();
          Point newPoint = (Point)arg;
-         
-         if(!OutOfBounds(newPoint)){
-         slideList.getSelectedValue().setCaptionLocation(newPoint);
-         }
-         else{
+         if(OutOfBounds(newPoint)){
+         //slideList.getSelectedValue().setCaptionLocation(newPoint);
+         //}
+         //else{
              draggableCaption.setInsideWindow(false);
              draggableCaption.setBorder(border);
          }
          if(draggableCaption.getFinalPoint()){
-             System.out.println(oldPoint.getX() + ", " + oldPoint.getY());
-             System.out.println(newPoint.getX() + ", " + newPoint.getY());
+             commandList.performAction(new CaptionMoveCommand("Caption Moved", slideList.getSelectedValue(), oldPoint, newPoint));
+             //System.out.println(oldPoint.getX() + ", " + oldPoint.getY());
+             //System.out.println(newPoint.getX() + ", " + newPoint.getY());
          }
     }
 
@@ -359,7 +358,7 @@ public class GUIImageViewer implements Observer
         display = display.replace("Image: ", "");	
         captionArea.setText("" + display);
         currentCaption.setText("" + display);
-		currentCaption.setLocation(slide.getCaptionLocation());
+        currentCaption.setLocation(slide.getCaptionLocation());
         myViewer.setCurrentImage(slide.getImage());	
         myViewer.repaint();
         //Omari   
