@@ -302,7 +302,8 @@ public class GUIImageViewer implements Observer
 			refreshSlide();
                         
 		}
-                        commandList.clear();
+        
+		commandList.clear();
     }
 
     public static void addNewSlide() {
@@ -342,19 +343,28 @@ public class GUIImageViewer implements Observer
         //Sarmad
     }
 
-    public static void refreshSlide() {
+    public static void refreshSlide() 
+	{
         //in case no row is actually selected, don't want to cause a runtime error. 
         //Just auto select the first row on the jList because list will never be empty
-        if (slideList.getSelectedIndex() == -1) {
+        if (slideList.getSelectedIndex() == -1) 
+		{
             slideList.setSelectedIndex(0);
         }
-        String display = slideList.getSelectedValue().toString();
-        display = display.replace("Image: ", "");
+		
+		SlideImage slide = slideList.getSelectedValue();
+		
+        String display = slide.toString();
+        display = display.replace("Image: ", "");	
         captionArea.setText("" + display);
+		
         currentCaption.setText("" + display);
-        myViewer.setCurrentImage(slideList.getSelectedValue().getImage());
+		currentCaption.setLocation(slide.getCaptionLocation());
+		
+        myViewer.setCurrentImage(slide.getImage());
+		
         myViewer.repaint();
-        //Omari   
+        // Omari   
     }
 
     public static File Browse(boolean opentruesavefalse, FileNameExtensionFilter filter)

@@ -20,7 +20,8 @@ public class ImageViewer extends JComponent
     Image currentImage;
     Box myBox;
     
-    ImageViewer(Box b){
+    ImageViewer(Box b)
+	{
         myBox = b;
     }
 	
@@ -29,9 +30,9 @@ public class ImageViewer extends JComponent
         return currentImage;
     }
 	
-    void setCurrentImage(Image i)
+    void setCurrentImage(Image img)
 	{
-        currentImage = i;
+        currentImage = img;
     }
 	
     @Override 

@@ -27,6 +27,7 @@ public class CaptionTextSetCommand extends CommandAction{
         slideChanged.setCaption(newCaption);
         //or do we put the default caption here?
     }
+	
     @Override
     public void actionPerformed(ActionEvent e) {
         //use put value to store old caption in OLD_CAPTION mneumonic making changes
@@ -35,6 +36,7 @@ public class CaptionTextSetCommand extends CommandAction{
     
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+	
     @Override
     public void undo()
     {

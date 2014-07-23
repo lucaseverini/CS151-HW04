@@ -29,6 +29,7 @@ public class SlideImage implements Serializable
     private String caption; 
 	private String filePath;
     private Point captionLocation;
+	static Point startLocation = new Point(300, 485);
  
 	/* 
     * Default Constructor That creates 
@@ -43,7 +44,7 @@ public class SlideImage implements Serializable
         this.image = null;
         this.caption = null;
         this.filePath = null;
-        this.captionLocation = new Point(0, 0);
+        this.captionLocation = startLocation;
     }
 
     /*
@@ -59,7 +60,7 @@ public class SlideImage implements Serializable
         this.caption = caption;
         this.filePath = filePath;
         this.image = image;
-        this.captionLocation = new Point(0, 0);
+        this.captionLocation = startLocation;
     }
     
     /*
