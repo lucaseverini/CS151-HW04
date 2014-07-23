@@ -28,7 +28,8 @@ public class DraggableImage extends JPanel {
     private static JPanel topPanel = new JPanel();
     public static boolean insideWindow = true;
     public static String border;
-    
+    public static Point oldPoint;
+    public static boolean finalPoint = false;
     
     /**
      * Default constructor for the object.  Adds two listeners that listen to the entire component.
@@ -53,6 +54,18 @@ public class DraggableImage extends JPanel {
     
     public void setInsideWindow(boolean b){
             insideWindow = b;
+    }
+    
+    public Point getOldPoint(){
+        return oldPoint;
+    }
+    
+    public void setOldPoint(Point p){
+        oldPoint = p;
+    }
+    
+    public boolean getFinalPoint(){
+        return finalPoint;
     }
     
     public void setBorder(String b){
@@ -98,6 +111,7 @@ public class DraggableImage extends JPanel {
     		public void mousePressed(MouseEvent e){
     			dx = e.getXOnScreen();
     			dy = e.getYOnScreen();
+                        oldPoint = draggableImage.getLocation();
     		}
 		
 
@@ -106,6 +120,7 @@ public class DraggableImage extends JPanel {
     		 */
     		@Override
     		public void mouseDragged(MouseEvent e){
+                        finalPoint = false;
     			Point imageLocation, originalLocation;
                         imageLocation = new Point();
     			
@@ -143,6 +158,14 @@ public class DraggableImage extends JPanel {
                 revalidate();
                 repaint();   
     		}
+                
+                @Override
+                public void mouseReleased(MouseEvent e){
+                    finalPoint = true;
+                    imageSubject.setChanged();
+                    imageSubject.notifyObservers(draggableImage.getLocation());
+                    imageSubject.clearChanged();
+                }
 
     	};
     }
