@@ -21,6 +21,7 @@ import java.util.*;
  */
 public class SlideShow implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private final ArrayList<SlideImage> images;
 	private String name;
 	private String filePathSlideShow;
@@ -65,23 +66,24 @@ public class SlideShow implements Serializable
 		}
 	}
         
-        /*
-         * Gets the Current Index of the Slide for Use with removeSlide by index.
-         * and getCurrentSlide by index, by iterating through the ArrayList and
-         * Comparing each caption to SlideImage bieng passed in.
-         * @param slide, SlideImage to compare against.
-        */
-        public int getCurrentIndex(SlideImage slide)
-        {
-            for(int i = 0; i < images.size(); i++)
+	/*
+	 * Gets the Current Index of the Slide for Use with removeSlide by index.
+	 * and getCurrentSlide by index, by iterating through the ArrayList and
+	 * Comparing each caption to SlideImage bieng passed in.
+	 * @param slide, SlideImage to compare against.
+	*/
+	public int getCurrentIndex(SlideImage slide)
+	{
+		for(int i = 0; i < images.size(); i++)
 		{
-		   if(images.get(i).getCaption().equals(slide.getCaption()))
+			if(images.get(i).getCaption().equals(slide.getCaption()))
 			{
-			   return i;
+				return i;
 			}
-                }   
-            return -1;
-        } 
+		}   
+		
+		return -1;
+	} 
 
 	/*
 	 * removes the Slide from the ArrayList of SlideImages 
@@ -93,11 +95,11 @@ public class SlideShow implements Serializable
 	   images.remove(index);
 	}
         
-        /*
-         * Returns the current slide according to its location 
-         * in the ArrayList. 
-         * @param index, the index of the slide in the ArrayList.
-         */
+	/*
+	 * Returns the current slide according to its location 
+	 * in the ArrayList. 
+	 * @param index, the index of the slide in the ArrayList.
+	 */
 	public SlideImage getCurrentSlide(int index)
 	{
 	   return images.get(index);

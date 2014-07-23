@@ -8,6 +8,7 @@
 
 package SlideShow;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -109,6 +110,10 @@ public class Serializer
 
 					Element captionElem = doc.createElement("caption");
 					captionElem.setTextContent(slide.getCaption());
+					imageElem.appendChild(captionElem);
+
+					Element captionLocElem = doc.createElement("captionLocation");
+					captionLocElem.setTextContent(slide.getCaptionLocation().toString());
 					imageElem.appendChild(captionElem);
 /*
 					// Just for debug
@@ -237,6 +242,12 @@ public class Serializer
 											else if(slideNode.getNodeName().equals("caption"))
 											{
 												slide.setCaption(slideNode.getTextContent());
+											}
+											else if(slideNode.getNodeName().equals("captionLocation"))
+											{
+												String[] coords = slideNode.getTextContent().split(",");
+												Point point = new Point(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+												slide.setCaptionLocation(point);
 											}
 
 											sShow.addSlide(slide);

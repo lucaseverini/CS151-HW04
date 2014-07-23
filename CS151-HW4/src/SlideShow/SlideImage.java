@@ -29,9 +29,8 @@ public class SlideImage implements Serializable
     private String caption; 
 	private String filePath;
     private Point captionLocation;
-    private int x;
-    private int y;
-   /* 
+ 
+	/* 
     * Default Constructor That creates 
     * the SlideImage Object (Slide)
     * @param image, image SlideImage(Slide) holds,
@@ -44,7 +43,7 @@ public class SlideImage implements Serializable
         this.image = null;
         this.caption = null;
         this.filePath = null;
-        this.captionLocation = new Point(x, y);
+        this.captionLocation = new Point(0, 0);
     }
 
     /*
@@ -60,7 +59,7 @@ public class SlideImage implements Serializable
         this.caption = caption;
         this.filePath = filePath;
         this.image = image;
-        this.captionLocation = new Point(x, y);
+        this.captionLocation = new Point(0, 0);
     }
     
     /*
@@ -77,8 +76,6 @@ public class SlideImage implements Serializable
         this.caption = caption;
         this.filePath = filePath;
         this.captionLocation = captionLocation;
-        
-       
     }
     
     /**
@@ -89,7 +86,7 @@ public class SlideImage implements Serializable
           
     public Point getCaptionLocation()
     {
-        return captionLocation;
+        return this.captionLocation;
     }
     
     /**
@@ -99,7 +96,9 @@ public class SlideImage implements Serializable
      */
     public void setCaptionLocation(Point location)
     {
-        captionLocation = new Point(location);
+        this.captionLocation = location;
+		
+		System.out.println(location);
     }
     /*
      * Returns the Slide's image
@@ -107,7 +106,7 @@ public class SlideImage implements Serializable
      */
     public BufferedImage getImage()
     {
-        return image;
+        return this.image;
     }
     
     /*
