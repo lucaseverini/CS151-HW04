@@ -161,21 +161,27 @@ public class GUIImageViewer implements Observer
         createNewSlideShow();
         myFrame.setVisible(true);
     }
-
     
-    public void update(Observable o, Object arg) {
+    @Override public void update(Observable o, Object arg) {
          /*DraggableImage newImage = (DraggableImage)arg;
          System.out.println(newImage.getLocation());
          Above code returns a typecast exception. Get around this via using
          Point, which is the only object we care about.*/
-         Point validLocation = slideList.getLocation();
+         
+         Point oldPoint;
+         oldPoint = draggableCaption.getOldPoint();
          Point newPoint = (Point)arg;
+         
          if(!OutOfBounds(newPoint)){
          slideList.getSelectedValue().setCaptionLocation(newPoint);
          }
          else{
              draggableCaption.setInsideWindow(false);
              draggableCaption.setBorder(border);
+         }
+         if(draggableCaption.getFinalPoint()){
+             System.out.println(oldPoint.getX() + ", " + oldPoint.getY());
+             System.out.println(newPoint.getX() + ", " + newPoint.getY());
          }
     }
 
@@ -302,8 +308,7 @@ public class GUIImageViewer implements Observer
 			refreshSlide();
                         
 		}
-        
-		commandList.clear();
+                        commandList.clear();
     }
 
     public static void addNewSlide() {
@@ -343,28 +348,21 @@ public class GUIImageViewer implements Observer
         //Sarmad
     }
 
-    public static void refreshSlide() 
-	{
+    public static void refreshSlide() {
         //in case no row is actually selected, don't want to cause a runtime error. 
         //Just auto select the first row on the jList because list will never be empty
-        if (slideList.getSelectedIndex() == -1) 
-		{
+        if (slideList.getSelectedIndex() == -1) {
             slideList.setSelectedIndex(0);
         }
-		
-		SlideImage slide = slideList.getSelectedValue();
-		
+        SlideImage slide = slideList.getSelectedValue();		
         String display = slide.toString();
         display = display.replace("Image: ", "");	
         captionArea.setText("" + display);
-		
         currentCaption.setText("" + display);
 		currentCaption.setLocation(slide.getCaptionLocation());
-		
-        myViewer.setCurrentImage(slide.getImage());
-		
+        myViewer.setCurrentImage(slide.getImage());	
         myViewer.repaint();
-        // Omari   
+        //Omari   
     }
 
     public static File Browse(boolean opentruesavefalse, FileNameExtensionFilter filter)
