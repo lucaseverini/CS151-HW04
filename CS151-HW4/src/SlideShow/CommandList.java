@@ -17,7 +17,7 @@ public class CommandList {
 
     private ArrayList<CommandAction> actionList;
     private final int MAX_UNDO = 10;
-    GUIImageViewer viewer;
+    private GUIImageViewer viewer;
     public CommandList()
     {
         actionList = new ArrayList<>();
