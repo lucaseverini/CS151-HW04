@@ -29,6 +29,7 @@ public class CommandList {
         {
             actionList.remove(0);
         }
+        updateUndoMenu();
     }
     
     public void undo()
@@ -38,11 +39,23 @@ public class CommandList {
             CommandAction a = actionList.remove(actionList.size() - 1);
             a.undo();
         }
+        updateUndoMenu();
     }
     
     public void clear()
     {
         actionList.clear();
+        updateUndoMenu();
         //TODO: diable undo button
+    }
+    
+    public boolean updateUndoMenu()
+    {
+        if(actionList.isEmpty())
+        {
+            return true;
+        }
+        
+        return false;
     }
 }

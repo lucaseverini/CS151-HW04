@@ -450,6 +450,11 @@ public class GUIImageViewer implements Observer
        refreshSlide();
         //refreshSlidesList();
     }
+    
+    public static void updateUndoMenuButton()
+    {
+        undoMenu.setEnabled(commandList.updateUndoMenu());
+    }
 
     //SlideImages part of test method. To be deleted later.
     /*public static void TestCode() throws IOException
