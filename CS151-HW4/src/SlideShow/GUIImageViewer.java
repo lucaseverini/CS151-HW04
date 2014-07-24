@@ -284,6 +284,7 @@ public class GUIImageViewer implements Observer
 			JOptionPane.showMessageDialog(null, message, "Slide Wizard", JOptionPane.ERROR_MESSAGE);
                         commandList.clear();
 		}
+                commandList.clear();
     }
 
     public static void openSlideShow() 
@@ -451,7 +452,7 @@ public class GUIImageViewer implements Observer
         //refreshSlidesList();
     }
     
-    public static void updateUndoMenuButton()
+    public void updateUndoMenuButton()
     {
         undoMenu.setEnabled(commandList.updateUndoMenu());
     }

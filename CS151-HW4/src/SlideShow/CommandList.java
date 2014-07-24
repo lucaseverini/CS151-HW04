@@ -17,9 +17,11 @@ public class CommandList {
 
     private ArrayList<CommandAction> actionList;
     private final int MAX_UNDO = 10;
+    GUIImageViewer viewer;
     public CommandList()
     {
-        actionList = new ArrayList<>();      
+        actionList = new ArrayList<>();
+        viewer = new GUIImageViewer();
     }
     //perform the action
     public void performAction(CommandAction a)
@@ -29,7 +31,7 @@ public class CommandList {
         {
             actionList.remove(0);
         }
-        updateUndoMenu();
+        viewer.updateUndoMenuButton();
     }
     
     public void undo()
@@ -39,13 +41,14 @@ public class CommandList {
             CommandAction a = actionList.remove(actionList.size() - 1);
             a.undo();
         }
-        updateUndoMenu();
+        viewer.updateUndoMenuButton();
     }
     
     public void clear()
     {
         actionList.clear();
-        updateUndoMenu();
+        
+        viewer.updateUndoMenuButton();
         //TODO: diable undo button
     }
     
@@ -53,9 +56,9 @@ public class CommandList {
     {
         if(actionList.isEmpty())
         {
-            return true;
+            return false;
         }
         
-        return false;
+       return true;
     }
 }
