@@ -54,9 +54,10 @@ public class Serializer
 				out.close();
 				fileOut.close();
 			}
-			catch(IOException ex)
+			catch(Exception ex)
 			{
 				System.out.println("openSlideFromFile Exception: " + ex.getMessage());
+				
 				return 1;
 			}
 		}
@@ -168,7 +169,7 @@ public class Serializer
 				in.close();
 				fileIn.close();
 			}
-			catch(IOException | ClassNotFoundException ex)
+			catch(Exception ex)
 			{
 				System.out.println(ex.getMessage());
 				return null;

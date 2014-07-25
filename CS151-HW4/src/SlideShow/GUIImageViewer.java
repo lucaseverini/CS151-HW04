@@ -280,7 +280,7 @@ public class GUIImageViewer implements Observer
         
 		if(Serializer.saveSlideToFile(sShow, currFile.getPath()) != 0)
 		{
-			String message = String.format("The file %s can't be saved.", currFile.getPath());
+			String message = String.format("The current slideshow can't be saved in file %s", currFile.getPath());
 			JOptionPane.showMessageDialog(null, message, "Slide Wizard", JOptionPane.ERROR_MESSAGE);
                         commandList.clear();
 		}
@@ -298,7 +298,7 @@ public class GUIImageViewer implements Observer
 		SlideShow slideShow = Serializer.openSlideFromFile(currFile.getPath());
 		if(slideShow == null)
 		{
-			String message = String.format("The file %s can't be opened.", currFile.getPath());
+			String message = String.format("A SlideShow can't be read from file %s.", currFile.getPath());
 			JOptionPane.showMessageDialog(null, message, "Slide Wizard", JOptionPane.ERROR_MESSAGE);
 		}
 		else
@@ -311,18 +311,29 @@ public class GUIImageViewer implements Observer
                         commandList.clear();
     }
 
-    public static void addNewSlide() {
+    public static void addNewSlide() 
+	{
         sShow.addSlide(new SlideImage());
         refreshSlidesList();
         refreshSlide();
         slideList.setSelectedIndex(sShow.getSize() - 1);
     }
 
-    public static void saveSlide(){
+    public static void saveSlide()
+	{
         String newCaption = captionArea.getText();
         SlideImage slideChanged = slideList.getSelectedValue();
+		if(slideChanged.getImage() == null)
+		{
+			String message = String.format("A slide without image can't be saved.");
+			JOptionPane.showMessageDialog(null, message, "Slide Wizard", JOptionPane.ERROR_MESSAGE);
+
+			return;
+		}
+		
         String oldCaption = slideChanged.getCaption();
-        if (!newCaption.equals(oldCaption)) {
+        if (!newCaption.equals(oldCaption)) 
+		{
             commandList.performAction(new CaptionTextSetCommand("Text Set", slideChanged, oldCaption, newCaption));
             //slideChanged.setCaption((newCaption)); old code from assignment 3
             refreshSlidesList();
